@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('reservations', function (Blueprint $table) {
+        Schema::create('book_user', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_user');
-            $table->unsignedBigInteger('id_book');
-            $table->foreign('id_book')
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('book_id');
+            $table->foreign('book_id')
             ->references('id')
             ->on('books')
             ->onDelete('cascade');
-            $table->foreign('id_user')
+            $table->foreign('user_id')
             ->references('id')
             ->on('users')
             ->onDelete('cascade');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('reservations');
+        Schema::dropIfExists('book_user');
     }
 };

@@ -16,9 +16,9 @@ class Book extends Model
         'status',
     ];
 
-    public function reservation()
+    public function user()
     {
-        return $this->hasMany(Reservation::class);
+        return $this->belongsToMany(User::class);
     }
     
 }

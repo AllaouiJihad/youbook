@@ -25,18 +25,31 @@
           <li><a class="text-decoration-none" href="{{route('show')}}">Home</a></li>
           @if(session()->has('user'))
           @php
-          $user = session('user');
+              $user = session('user');
           @endphp
-          @if($user->id_role == 2)
-          <li><a class="text-decoration-none" href="{{route('create')}}">Add book</a></li>
-          @endif
-          <li><a class="text-decoration-none" href="#services">Reserved Book</a></li>
-          <li><a class="text-decoration-none" href="{{route('logout')}}">logout</a></li>
-          
+      
+          @if($user->id_role == 1)
+              <li><a class="text-decoration-none" href="{{ route('create') }}">Add book</a></li>
+              <li><a class="text-decoration-none" href="{{ route('logout') }}">Logout</a></li>
+
           @else
-          <li><a class="text-decoration-none" href="{{route('register')}}">Register</a></li>
-          <li><a class="text-decoration-none" href="{{route('login')}}">Login</a></li>
+              <li><a class="text-decoration-none" href="{{ route('books.reserved') }}">Reserved Book</a></li>
+              <li><a class="text-decoration-none" href="{{ route('logout') }}">Logout</a></li>
+              <li>
+                <a a class="text-decoration-none"   href="#route('notifications') ">
+                    <div class=" d-flex align-items-center "><i class="fa-solid fa-bell me-1"></i>
+
+                            <p class="btn btn-danger  p-0 rounded-circle m-0">{{ $reservationCount }}</p>
+                    
+                    </div>
+                </a>
+            </li>
           @endif
+      
+      @else
+          <li><a class="text-decoration-none" href="{{ route('register') }}">Register</a></li>
+          <li><a class="text-decoration-none" href="{{ route('login') }}">Login</a></li>
+      @endif
         </ul>
       </nav><!-- .navbar -->
 

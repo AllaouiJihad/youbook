@@ -27,6 +27,7 @@ Route::get('/', [BookController::class , 'index'])->name('show');
  Route::get('/edit/{id}', [BookController::class, 'edit'])->name('books.edit');
  Route::put('books/edit/{id}', [BookController::class, 'update'])->name('books.update');
 
+Route::get('/emprunte', [BookController::class, 'book_reserved'])->name('books.reserved');
 
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::get('/login', [AuthController::class,'showLogin'])->name('login');
@@ -37,5 +38,5 @@ Route::post('/register', [AuthController::class, 'register'])->name('registerAct
 Route::post('/login', [AuthController::class, 'login'])->name('loginAction');
 
 Route::post('/reserve/{id}', [BookController::class, 'reserveBook'])->name('reserve.book');
-
+Route::post('/recuperer/{id}', [BookController::class, 'recuperer'])->name('recuperer');
 Route::get('/test',[RoleController::class, 'index']);

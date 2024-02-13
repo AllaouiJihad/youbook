@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBook;
 use App\Models\Book;
 use App\Models\Reservation;
+use App\Models\User;
+use App\Models\UserBook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -15,8 +17,14 @@ class BookController extends Controller
     public function index()
     {
         $books_disponible = Book::where('status', true)->get();
-        $books_emprunter = Book::where('status', false)->get();
-        return view('index',['books_emprunter' => $books_emprunter, 'books_disponible' => $books_disponible]);
+        return view('index',['books_disponible' => $books_disponible]);
+    }
+
+    public function book_reserved(){
+        $user = session('user');
+        
+        $books_emprunter = User::with('book')->where('id', $user->id)->get();
+        return view('emprunte',['books_emprunter' => $books_emprunter]);
     }
 
     /**
@@ -34,7 +42,7 @@ class BookController extends Controller
     {
         
         $book = Book::create($request->only(['title','description','author',`updated_at`, `created_at` ]));
-        session()->flash('status', 'book creer avec succes');
+        session()->flash('success', 'book creer avec succes');
         return redirect()->route("show");
     }
 
@@ -88,12 +96,12 @@ class BookController extends Controller
         $reservation->update([
             'status' => false,
         ]);
-        $book = new Reservation();
+        $book = new UserBook();
         $user = session('user');
         
-        $book->id_book = $id;
+        $book->book_id = $id;
         
-        $book->id_user = $user->id;
+        $book->user_id = $user->id;
         $book->date_reservation = date('Y-m-d');
         $book->save();
 
@@ -101,17 +109,16 @@ class BookController extends Controller
     }
     public function recuperer( $id)
     {
-        // Find the reservation by its ID
-        $reservation = Book::findOrFail($id);
-
-        // Update the reservation with the validated data
-        $reservation->update([
+       
+        $book = Book::where('id',$id);
+        
+        $book->update([
             'status' => true,
             
         ]);
-        session()->flash('status', 'book recuperer avec succes');
-        // Redirect or respond as needed
-        return redirect()->back();
+
+        UserBook::where('book_id',$id)->delete();
+        return redirect()->route('show')->with('success', 'book recuperer avec succes');
     }
 }
 

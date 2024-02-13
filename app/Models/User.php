@@ -45,9 +45,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function reservation()
+    public function book()
     {
-        return $this->hasMany(Reservation::class);
+        return $this->belongsToMany(Book::class);
     }
     public function role(): BelongsTo
     {
